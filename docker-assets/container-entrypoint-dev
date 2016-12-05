@@ -1,0 +1,25 @@
+#!/bin/bash
+
+[[ -s /etc/default/evm ]] && source /etc/default/evm
+
+# Init postgresql DB, inject role and start up service
+
+set -e 
+
+if [ ! -d ${APPLIANCE_PG_DATA}/base ]; then
+  chown postgres:postgres ${APPLIANCE_PG_DATA}
+  su postgres -c "initdb -D ${APPLIANCE_PG_DATA}"
+  su postgres -c "pg_ctl -D ${APPLIANCE_PG_DATA} start"
+  sleep 5
+  su postgres -c "psql -c \"CREATE ROLE root SUPERUSER LOGIN PASSWORD 'smartvm'\""
+else
+  su postgres -c "pg_ctl -D ${APPLIANCE_PG_DATA} start"
+fi
+
+# Start memcached
+/usr/bin/memcached -u memcached -d
+
+# Install deps, prepare DB
+cd ${APP_ROOT} && bin/setup --no-tests
+
+exec "$@"
