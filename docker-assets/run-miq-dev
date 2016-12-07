@@ -4,12 +4,6 @@
 
 set -e
 
-# This is a non-systemd container, no process or service control.
-# Must execute rails server in foreground, if backgrounded the container will exit immediately after server is started on bg.
-# FIXME: Need to find a rake task that actually leaves the server foreground
-# It might be a good idea to actually implement supervisord to start and keep track of daemons.
-
-
 cd ${APP_ROOT}
 rake evm:start
 exec bin/rails server
