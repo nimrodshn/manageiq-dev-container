@@ -4,6 +4,8 @@
 
 # Init postgresql DB, inject role and start up service
 
+echo " = INIT DB = "
+
 set -e 
 
 if [ ! -d ${APPLIANCE_PG_DATA}/base ]; then
@@ -19,7 +21,24 @@ fi
 # Start memcached
 /usr/bin/memcached -u memcached -d
 
-# Install deps, prepare DB
-cd ${APP_ROOT} && bin/setup --no-tests
+# Install deps
+cd ${APP_ROOT}  
+
+# setup manageiq-ui-classic repo
+mkdir plugins
+git clone https://github.com/ManageIQ/manageiq-ui-classic plugins/manageiq-ui-classic
+
+# setup Gemfile.dev.rb
+echo "= writing to Gemfile.dev.rb ="
+echo "override_gem 'manageiq-ui-classic', :path => File.expand_path('plugins/manageiq-ui-classic', __dir__)" > Gemfile.dev.rb
+
+# setup managiq sample app
+ln -s ${APP_ROOT} plugins/manageiq-ui-classic/spec/manageiq
+
+# plugins/manageiq-ui-classic/bin/setup # <--- problem here!
+
+# prepare DB
+bin/setup --no-tests
+
 
 exec "$@"
