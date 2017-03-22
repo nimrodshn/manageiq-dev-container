@@ -16,11 +16,14 @@ git clone https://github.com/ManageIQ/manageiq.git
 
 ### Getting Started
 
-All we need to do is run the following command:
+All we need to do is run the following commands:
+
 ```
-docker run -p 3000:3000 --privileged -v your/local/manageiq:/manageiq/ miq-dev-container:latest
+docker build -t miq-dev-container .
+
+docker run -p 3000:3000 -v your/local/manageiq:/manageiq/ miq-dev-container
 ```
-It should take around 4-5 minutes for the application to initate the database and workers.
+It should take around 4-5 minutes for the image to be built and another 4-5 minutes for the application to initate the database and workers.
 
 After the application was initiated - We are ready to develop!
 
