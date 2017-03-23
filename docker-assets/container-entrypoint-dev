@@ -35,10 +35,25 @@ echo "override_gem 'manageiq-ui-classic', :path => File.expand_path('plugins/man
 # setup managiq sample app
 ln -s ${APP_ROOT} plugins/manageiq-ui-classic/spec/manageiq
 
-# plugins/manageiq-ui-classic/bin/setup # <--- problem here!
+base_address="https://github.com/ManageIQ/"
+
+for ARG in "$@"
+do
+  git clone $base_address/$ARG plugins/$ARG
+  echo "= writing 'override_gem '$ARG', :path => File.expand_path('plugins/manageiq-ui-classic', __dir__)' to Gemfile.dev.rb ="
+  echo "override_gem '$ARG', :path => File.expand_path('plugins/$ARG', __dir__)" >> Gemfile.dev.rb
+  ln -s ${APP_ROOT} plugins/$ARG/spec/manageiq
+done
 
 # prepare DB
 bin/setup --no-tests
 
+[[ -s /etc/default/evm ]] && source /etc/default/evm
 
-exec "$@"
+set -e
+
+# init app
+cd ${APP_ROOT}
+rake evm:start
+exec bin/rails server
+

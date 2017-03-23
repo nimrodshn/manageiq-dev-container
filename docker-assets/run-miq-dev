@@ -1,9 +1,0 @@
-#!/bin/bash
-
-[[ -s /etc/default/evm ]] && source /etc/default/evm
-
-set -e
-
-cd ${APP_ROOT}
-rake evm:start
-exec bin/rails server

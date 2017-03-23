@@ -100,4 +100,3 @@ RUN source /etc/default/evm && \
 EXPOSE 3000
 
 ENTRYPOINT [ "container-entrypoint-dev" ]
-CMD [ "run-miq-dev" ]
