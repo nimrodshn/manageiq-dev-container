@@ -71,7 +71,6 @@ RUN echo "# Description: Sets the environment for scripts and console users" >> 
 
 ## Copy entrypoint and run scripts
 COPY docker-assets/container-entrypoint-dev /usr/bin
-COPY docker-assets/run-miq-dev /usr/bin
 
 ## Git clone manageiq
 RUN git clone --depth 1 https://github.com/ManageIQ/manageiq ${APP_ROOT}
