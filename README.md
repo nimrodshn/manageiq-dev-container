@@ -21,9 +21,17 @@ All we need to do is run the following commands:
 ```
 docker build -t miq-dev-container .
 
-docker run -p 3000:3000 -v your/local/manageiq:/manageiq/ miq-dev-container
+docker run -p 3000:3000 -v your/local/manageiq:/manageiq/ miq-dev-container <plugin0> <plugin1> ...
 ```
 It should take around 4-5 minutes for the image to be built and another 4-5 minutes for the application to initate the database and workers.
+
+The ```docker run``` command accepts zero or more arguments as plugin to download (eg : ```manageiq-providers-amazon, manageiq-providers-azure``` etc..).
+
+### Plugins Example
+
+running ```docker run -p 3000:3000 -v your/local/manageiq:/manageiq/ miq-dev-container manageiq-providers-amazon``` will setup a miq-dev container with the manageiq-providers-amazon plugin built-in.
+
+
 
 After the application was initiated - We are ready to develop!
 
